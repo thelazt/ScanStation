@@ -6,6 +6,7 @@ import sys
 import logging
 import subprocess
 import tempfile
+from pathlib import Path
 from datetime import datetime
 from enum import Enum
 from time import sleep
@@ -19,16 +20,23 @@ from scanstation.scanner import Scanner
 
 
 class ScanStation(object):
-    def __init__(self, configfile = 'config.ini'):
+    def __init__(self, configfile):
+        if not Path(configfile).is_file():
+            logging.error('Config file "{}" not found!'.format(configfile))
+            sys.exit(1)
+
         self.config = ConfigParser()
         self.config.read(configfile)
 
-        Input(self.config.items('input'))
-        self.oled = Output()
+        buttons = {}
+        for (key, val) in self.config.items('input'):
+            buttons[key.upper()] = int(val)
+        self.btn = Input(buttons)
 
-        display = self.config['display']
-        self.font = ImageFont.truetype(display['font_name'], display['font_size'])
-        self.fontSmall = ImageFont.truetype(display['font_small_name'], display['font_small_size'])
+        self.oled = Output(ssd1306address = int(self.config.get('display', 'address', fallback='0x3c'), 16), threshold = self.config.getint('display', 'threshold', fallback=210), rotation = self.config.getint('display', 'rotate', fallback=3))
+
+        self.font = ImageFont.truetype(self.config.get('display', 'font_name'), self.config.getint('display', 'font_size'))
+        self.fontSmall = ImageFont.truetype(self.config.get('display', 'font_small_name'), self.config.getint('display', 'font_small_size'))
 
         self.scanner = Scanner(dev_id = self.config.get('scanner', 'device', fallback=None), source_name = self.config.get('scanner', 'source', fallback=None))
         for (key, val) in self.config.items('scanner'):
@@ -71,26 +79,26 @@ class ScanStation(object):
         self.oled.show()
 
     def scanHelper(self, status):
-        return self.scanner.scan(abort = lambda: self.btn.pressed(Button.delete), status = status, status_refresh = self.config.get('scanner', 'status_refresh', fallback=5), max_page = self.config.get('scanner', 'max_page', fallback=20), chunk_size = self.config.get('scanner', 'chunk_size', fallback=1024 * 1024))
+        return self.scanner.scan(abort = lambda: self.btn.pressed(Button.DELETE), status = status, status_refresh = self.config.get('scanner', 'status_refresh', fallback=5), max_page = self.config.get('scanner', 'max_page', fallback=20), chunk_size = self.config.get('scanner', 'chunk_size', fallback=1024 * 1024))
 
     def scanImages(self, timeout):
         docs = []
-        b = Button.new
-        while b and b != Button.sync:
-            if b == Button.new or (b == Button.add and len(docs) == 0):
+        b = Button.NEW
+        while b and b != Button.SYNC:
+            if b == Button.NEW or (b == Button.ADD and len(docs) == 0):
                 pages = self.scanHelper(lambda page, status, img: self.display(title = "Scanne" + status, scan = img, footer = "Seite " + str(1 + page) + "\nDokument " + str(len(docs) + 1)) )
                 if pages and len(pages) > 0:
                     docs.append(pages)
                 elif len(docs) == 0:
                     return
 
-            elif b == Button.add:
+            elif b == Button.ADD:
                 d = len(docs)
                 pages = self.scanHelper(lambda page, status, img: self.display(title = "Scanne" + status, scan = img, footer = "Seite " + str(len(docs[d - 1]) + 1 + page) + "\nDokument " + str(d)) )
                 if pages and len(pages) > 0:
                     docs[d - 1].extend(pages)
 
-            elif b == Button.delete:
+            elif b == Button.DELETE:
                 d = len(docs)
                 if d == 0 or (d == 1 and len(docs[0]) == 1):
                     del docs[:]
@@ -146,8 +154,8 @@ class ScanStation(object):
             self.display(title='Bereit...', footer = "Schalte in\n" + str(timeout) + " Sek ab")
 
             b = self.btn.wait(1)
-            if b == Button.new or b == Button.add:
+            if b == Button.NEW or b == Button.ADD:
                 return True
-            elif b == Button.delete or timeout <= 0:
+            elif b == Button.DELETE or timeout <= 0:
                 return False
 

@@ -9,7 +9,7 @@ from PIL import ImageFont, Image, ImageDraw
 
 
 class Output(object):
-    def __init__(self, ssd1306address : int = 0xc3, threshold : int = 210, rotation : int = 3):
+    def __init__(self, ssd1306address, threshold, rotation):
         serial = i2c(port=1, address=ssd1306address)
         self.image_threshold = threshold
         self.device = ssd1306(serial, rotate=rotation)

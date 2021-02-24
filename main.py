@@ -10,7 +10,7 @@ from scanstation import ScanStation
 logging.basicConfig(level=logging.INFO)
 
 try:
-    station = ScanStation()
+    station = ScanStation('config.ini')
     timeout = 600
 
     # Scanner initialisieren...

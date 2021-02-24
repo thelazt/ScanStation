@@ -28,7 +28,7 @@ class Scanner(object):
                 self.logging.error(msg)
 
 
-    def __init__(self, dev_id : str = None, source_name : str = None):
+    def __init__(self, dev_id = None, source_name = None):
         self.libinsanelogger = self.Logger()
         Libinsane.register_logger(self.libinsanelogger)
 
@@ -64,9 +64,11 @@ class Scanner(object):
             self.dev.close()
 
 
-    def set(self, name : str, value):
+    def set(self, name, value):
         if name in self.opts:
             old = self.opts[name].get_value()
+            if type(old) is int:
+                value = int(value)
             if old != value:
                 logging.info("Setting scanner option {} from {} to {}".format(name, old, value))
                 self.opts[name].set_value(value)

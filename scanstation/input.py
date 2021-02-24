@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
+import logging
 from enum import Enum
 from time import sleep
 import RPi.GPIO as GPIO
+
+class Button(Enum):
+    pass
 
 class Input(object):
     wait_time = 0.1
