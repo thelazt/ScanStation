@@ -142,7 +142,7 @@ def main(symboltable='symboltable', pagefiles=glob.glob('page-*')):
       sys.stderr.write("error reading page file %s\n"% p)
       continue
     (width, height,xres,yres) = struct.unpack('>IIII', contents[11:27])
-    
+
     if xres==0:
       xres=dpi
     if yres==0:
@@ -187,13 +187,14 @@ if __name__ == '__main__':
     sys.stderr.write("Usage: %s [dpi] [image] [[images...]] > out.pdf\n" % sys.argv[0])
     sys.exit(1)
   elif not os.path.exists(jbig2):
+    sys.stderr.write(jbig2)
     sys.stderr.write("jbig2 not found - you have to build it!\n")
     sys.exit(1)
   else:
     dpi = int(sys.argv[1])
     with tempfile.TemporaryDirectory() as tmpdirname:
       base = tmpdirname + '/output'
-      cmd = [ jbig2, '-s', '-4', '-p', '-b', base ]
+      cmd = [ jbig2, '-s', '-2', '-p', '-b', base ]
       cmd.extend(sys.argv[2:])
       enc = subprocess.run(args = cmd, stdout=sys.stderr.buffer, stderr=sys.stderr.buffer)
       sym = base + '.sym'
