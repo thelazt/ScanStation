@@ -14,20 +14,24 @@ class Output(object):
         self.image_threshold = threshold
         self.device = ssd1306(serial, rotate=rotation)
         self.background = Image.new(self.device.mode, self.device.size, 'black')
-        logging.info("Display mit {}x{} Pixel".format(self.device.width, self.device.height))
+        logging.info("Display with {}x{} Pixel".format(self.device.width, self.device.height))
+
 
     def draw(self):
         draw = ImageDraw.Draw(self.background)
         return draw
 
-    def image(self, img : Image, pos : (int, int)):
+
+    def image(self, img, pos):
         tmp = img.copy()
         tmp.thumbnail(self.device.size)
         self.background.paste(tmp.convert('L').point(lambda x : 255 if x > self.image_threshold else 0, mode='1'), pos)
         del tmp
 
+
     def clear(self):
         self.draw().rectangle((0, 0, self.device.width-1, self.device.height-1), outline='black', fill='black')
+
 
     def show(self):
         self.device.display(self.background)

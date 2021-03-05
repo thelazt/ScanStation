@@ -11,15 +11,13 @@ logging.basicConfig(level=logging.INFO)
 
 try:
     station = ScanStation('config.ini')
+
     timeout = 600
-
-    # Scanner initialisieren...
-
     while station.standby(timeout):
         station.action()
         timeout = 60
 
-    station.shutdown()
-except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+    station.exit()
+except KeyboardInterrupt:
    logging.error('Keyboard interrupt')
 

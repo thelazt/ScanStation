@@ -59,6 +59,7 @@ class Scanner(object):
 
         self.opts = {opt.get_name(): opt for opt in self.source.get_options()}
 
+
     def __del__(self):
         if self.dev:
             self.dev.close()
@@ -74,8 +75,8 @@ class Scanner(object):
                 self.opts[name].set_value(value)
             else:
                 logging.info("Scanner option {} is already set to {}".format(name, value))
-        
-    def bytes2img(self, params, bytes) -> Image:
+
+    def bytes2img(self, params, bytes):
         fmt = params.get_format()
         assert(fmt == Libinsane.ImgFormat.RAW_RGB_24)
         (w, h) = (
@@ -85,7 +86,7 @@ class Scanner(object):
         return Image.frombuffer("RGB", (w, h), bytes, "raw", "RGB", 0, 1).convert('L')
 
 
-    def scan(self, abort = None, status = None, status_refresh : int = 5, max_page : int = 20, chunk_size = 1024 * 1024):
+    def scan(self, abort = None, status = None, status_refresh = 5, max_page = 20, chunk_size = 1024 * 1024):
         session = self.source.scan_start()
         pages = []
         try:
