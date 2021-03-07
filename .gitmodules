@@ -1,6 +1,6 @@
 [submodule "jbig2enc"]
 	path = jbig2enc
 	url = https://github.com/agl/jbig2enc.git
-[submodule "paperwork"]
-	path = paperwork
-	url = https://gitlab.gnome.org/World/OpenPaperwork/paperwork.git
+[submodule "libinsane"]
+	path = libinsane
+	url = https://gitlab.gnome.org/World/OpenPaperwork/libinsane
