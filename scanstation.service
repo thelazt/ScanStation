@@ -1,0 +1,17 @@
+[Unit]
+Description=ScanStation
+After=multi-user.target
+
+[Service]
+Type=idle
+Environment="LD_LIBRARY_PATH=/usr/local/lib/arm-linux-gnueabihf/"
+Environment="GI_TYPELIB_PATH=/usr/local/lib/arm-linux-gnueabihf/girepository-1.0"
+ExecStart=/usr/bin/python3 /home/pi/scanstation/main.py
+WorkingDirectory=/home/pi/scanstation
+User=pi
+Group=scanner
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
