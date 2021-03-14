@@ -1,7 +1,7 @@
 Raspberry Pi Hardware
 =====================
 
-![Flussdiagramm](./images/wiring.svg)
+![Flussdiagramm](./images/wiring.png)
 
 Mit Lötkolben und Lochplatine bewaffnet kann man (ohne größere Fähigkeiten) einen HAT für den Raspberry Pi basteln, für die Verkabelung der Tasten bieten sich
  * *GPIO5* (Pin 29)
