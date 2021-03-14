@@ -1,5 +1,5 @@
-Raspberry Pi (ScanStation)
-==========================
+Raspberry Pi Software
+=====================
 
 Auf eine SD-Karte ein [Raspbian](https://www.raspberrypi.org/software/operating-systems/) (Lite -- ohne Desktop) kopieren und den *Raspberry Pi* booten.
 
@@ -34,7 +34,7 @@ Sofern `scanimage -L` ohne `sudo` keine Ergebnisse liefert, müssen noch die ude
 
 	Bus 001 Device 004: ID 03f0:3f11 HP, Inc PSC-1315/PSC-1317
 
-die Vendor- (`03f0`) und Product-ID (`3f11`) herausfinden und eine entsprechende neue Regel erstellen:
+die Vendor- (hier `03f0`) und Product-ID (`3f11`) herausfinden und eine entsprechende neue Regel erstellen:
 
 	echo 'ATTRS{idVendor}=="03f0", ATTRS{idProduct}=="3f11",  MODE="0666", GROUP="scanner", ENV{libsane_matched}="yes"' > /etc/udev/rules.d/99-libsane.rules
 	sudo udevadm control --reload-rules
@@ -44,28 +44,33 @@ die Vendor- (`03f0`) und Product-ID (`3f11`) herausfinden und eine entsprechende
 JBIG2 Encoder
 -------------
 
-Die eingescannten Seiten werden im [Portable Document Format](https://de.wikipedia.org/wiki/Portable_Document_Format) gespeichert, bei welchem die gescannten Bilder für eine geringe Dateigröße wiederum im [JBIG2](https://de.wikipedia.org/wiki/JBIG2)-Format gespeichert werden.
-
-
+Die eingescannten Seiten werden im [Portable Document Format (PDF)](https://de.wikipedia.org/wiki/Portable_Document_Format) gespeichert, bei welchem die gescannten Bilder für eine geringe Dateigröße wiederum im [JBIG2](https://de.wikipedia.org/wiki/JBIG2)-Format gespeichert werden.
 
 	sudo apt install autoconf gcc make libtool libleptonica-dev
 	cd jbig2enc
 	./autogen.sh
 	./configure
 	make -j 4
+	cd ..
 
 
 libinsane
 ---------
-https://gitlab.gnome.org/World/OpenPaperwork/libinsane
+
+Die Bibliothek [Libinsane](https://gitlab.gnome.org/World/OpenPaperwork/libinsane) bietet für Skriptsprache Python einen einfachen Zugriff auf angeschlossene Scanner.
+Dafür werden noch einige Buildwerkzeuge und Programmbibliotheken benötigt, es kann wie folgt installiert werden:
 
 	sudo apt install meson cmake libsane-dev gtk-doc-tools valac
+	cd libsane
 	make
 	sudo make install
+	cd ..
 
 
 Paperwork
 ---------
+
+Für die Verwaltung der Dokumente wird [Paperwork](https://openpaper.work/) verwendet und über den [Python Paketmanager (pip)](https://de.wikipedia.org/wiki/Pip_(Python)) installiert werden kann, dazu aber die PDF Programmbibliothek [Poppler](https://de.wikipedia.org/wiki/Poppler) sowie die [Texterkennungssoftware (OCR)](https://de.wikipedia.org/wiki/Texterkennung) [Tesseract](https://de.wikipedia.org/wiki/Tesseract_(Software)) benötigt:
 
 	sudo apt install poppler-data libpoppler-dev libpoppler-cpp-dev gir1.2-poppler-0.18 iso-codes tesseract-ocr tesseract-ocr-deu 
 	python3 -m pip install paperwork paperwork-shell python-poppler termcolor natsort levenshtein
@@ -74,13 +79,13 @@ Die Dokumente (als PDF sowie eine XML Datei mit den OCR Daten) werden von *Paper
 Dieses Verzeichnis sollte natürlich aufgrund der eher kurzen Lebensdauer von SD-Karten irgendwie gesichert werden.
 Sofern ein Netzlaufwerk existiert, kann beispielsweise dieses verwendet werden.
 
-Allerdings ist es auch möglich ein Git-Repo zu verwenden:
+Allerdings ist es auch möglich ein [Git-Repository](https://de.wikipedia.org/wiki/Git) zu verwenden:
 Die Binärdateien (Bild im PDF Dokument) haben eine akzeptable Größe und werden i.d.R. nicht mehr verändert, entsprechend ist dieses Versionsverwaltungssystem geeignet:
 
 
 ### Repo auf entfernten Server
 
-Auf einem via SSH erreichbaren Server wird nun ein Git Repo angelegt:
+Auf einem via SSH erreichbaren Server wird nun ein Git Repository angelegt:
 
 	mkdir papers.git
 	cd papers.git
@@ -111,13 +116,13 @@ Analog dazu kann auf den PCs, mit welchen diese Dokumente angeschaut (und annoti
 	echo "*.thumb.jpg" > ~/papers/.gitignore
 	flatpak --user install https://builder.openpaper.work/paperwork_master.flatpakref
 
-Vor dem Starten sollten Änderungen (via `git pull`) geholt und nach dem Bearbeiten auf den Arbeitsrechnern natürlich immer wieder zurück geschoben (`git push`) werden.
+Vor dem Starten sollten Änderungen (via `git pull`) geholt und nach dem Bearbeiten auf den Arbeitsrechnern natürlich immer wieder zurück geschoben (`git push`) werden - dazu kann auch das Hilfsskript `utils/paperwork.sh` verwendet werden.
 
 
 Konfiguration
 -------------
 
-Die Beispielkonfiguration muss zu `config.ini` kopiert und angepasst werden:
+Die Beispielkonfiguration muss zu `config.ini` kopiert und an die eigenen Bedürfnisse angepasst werden:
 
 	cp config.example.ini config.ini
 	nano config.ini
@@ -126,13 +131,15 @@ Die Beispielkonfiguration muss zu `config.ini` kopiert und angepasst werden:
 (Auto)Start
 -----------
 
+Die Python-Skripte werden via [systemd](https://de.wikipedia.org/wiki/Systemd) gestartet, dazu müssen ggf. die Pfade in der `scanstation.service`-Datei angepasst und diese in das Verzeichnis `/etc/systemd/system/` kopiert werden:
 
 	sudo cp scanstation.service /etc/systemd/system/
 	sudo systemctl daemon-reload
 	sudo systemctl start scanstation
 
-Damit die *ScanStation* nun auch direkt nach dem Boot automatisch gestartet wird, 
+Die *ScanStation* soll nun auch direkt nach dem Boot automatisch gestartet werden, dazu
 
 	sudo systemctl enable scanstation
 
+ausführen
 
