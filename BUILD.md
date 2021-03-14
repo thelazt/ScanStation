@@ -18,7 +18,7 @@ Das [SSD1306](https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf)-Display wird
 
 Die Position der Taster sollte natürlich zum Gehäuse passen.
 
-Ein Beispielplan für ein 3mm-[HDF](https://de.wikipedia.org/wiki/Harte_Faserplatte)-Gehäuse mittes Lasercutter (zu finden im nächsten Maker-Space oder [FabLab](https://de.wikipedia.org/wiki/FabLab)):
+Ein Beispielplan für ein 3mm-[HDF](https://de.wikipedia.org/wiki/Harte_Faserplatte)-Gehäuse mittels Lasercutter (zu finden im nächsten Maker-Space oder [FabLab](https://de.wikipedia.org/wiki/FabLab)):
 
 ![Laser-Cut-Plan](./images/lasercut-template.svg)
 
