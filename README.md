@@ -60,9 +60,9 @@ Es werden folgende Hardwarekomponenten benötigt:
 Die Verkabelung und der Aufbau wird in der [Bauanleitung](BUILD.md) erklärt.
 
 
-Die benötigten Softwarepakete
+Das Projekt baut auf folgender Software auf:
 
- * das debianoide [Raspbian](https://www.raspberrypi.org/software/operating-systems/) als Betriebssystem
+ * dem debianoide [Raspbian](https://www.raspberrypi.org/software/operating-systems/) als Betriebssystem
  * Python 3 mit Graphikbibliothemn ([Pillow](https://pillow.readthedocs.io/en/latest/), [Cairo](https://pycairo.readthedocs.io/en/latest/) usw.)
  * [Sane](http://www.sane-project.org/) Werkzeuge (sowie [Libinsane](https://gitlab.gnome.org/World/OpenPaperwork/libinsane))
  * [JBIG2 Encoder](https://github.com/agl/jbig2enc)
@@ -96,4 +96,14 @@ Wieso dennoch dieses Format verwenden?
  * Und da eigentlich nur textuelle Dokumente relevant für die Archivierung sind, ist das Fehlen von Farben oder Graustufen in der digitalisierten kein Nachteil.
  * Außerdem können Bilder in diesem Format in PDF-Dateien eingebettet werden, d.h. es ist keine spezielle Software zum Betrachten notwendig.
 
-Schlussendlich sollen diese digitalisierten Dokumente nicht die Originaldokumente ersetzen, sondern nur den Zugriff auf diese vereinfachen: Die digitalen Versionen sind überall verfügbar und können einfach durchsucht werden, bei Bedarf erlauben sie (durch das Datum) einen einfachen Zugriff auf die tatsächlichen Papierdokumente
+Schlussendlich sollen diese digitalisierten Dokumente nicht die Originaldokumente ersetzen, sondern nur den Zugriff auf diese vereinfachen: Die digitalen Versionen sind überall verfügbar und können einfach durchsucht werden, bei Bedarf erlauben sie (durch das Datum) einen einfachen Zugriff auf die tatsächlichen Papierdokumente.
+
+
+Beispiel
+--------
+
+Die *ScanStation* im Praxisbetrieb:
+
+![Foto Überblick](./images/foto-full.jpg)
+
+![Foto Scan](./images/foto-scan.jpg)
