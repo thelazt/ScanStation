@@ -3,7 +3,7 @@ Raspberry Pi Software
 
 Auf eine SD-Karte ein [Raspbian](https://www.raspberrypi.org/software/operating-systems/) (Lite -- ohne Desktop) kopieren und den *Raspberry Pi* booten.
 
-Nach dem Anmelden muss via `sudo raspi-config` in *3 Interface Options* unter *P5 I2C* das I²C Kernelmodul aktivieren (wird für das Display gebraucht).
+Nach dem Anmelden muss via `sudo raspi-config` in *3 Interface Options* unter *P5 I2C* das I²C Kernelmodul aktiviert werden (wird für das Display gebraucht).
 
 Danach müssen die benötigten Pakete für die *ScanStation* (Eingabe via GPIO, Ausgabe via OLED-Display & Scannersteuerung) installiert & natürlich dieses Repo lokal geklont werden:
 
@@ -57,7 +57,7 @@ Die eingescannten Seiten werden im [Portable Document Format (PDF)](https://de.w
 libinsane
 ---------
 
-Die Bibliothek [Libinsane](https://gitlab.gnome.org/World/OpenPaperwork/libinsane) bietet für Skriptsprache Python einen einfachen Zugriff auf angeschlossene Scanner.
+Die Bibliothek [Libinsane](https://gitlab.gnome.org/World/OpenPaperwork/libinsane) bietet für die Skriptsprache Python einen einfachen Zugriff auf angeschlossene Scanner.
 Dafür werden noch einige Buildwerkzeuge und Programmbibliotheken benötigt, es kann wie folgt installiert werden:
 
 	sudo apt install meson cmake libsane-dev gtk-doc-tools valac
@@ -70,7 +70,7 @@ Dafür werden noch einige Buildwerkzeuge und Programmbibliotheken benötigt, es 
 Paperwork
 ---------
 
-Für die Verwaltung der Dokumente wird [Paperwork](https://openpaper.work/) verwendet und über den [Python Paketmanager (pip)](https://de.wikipedia.org/wiki/Pip_(Python)) installiert werden kann, dazu aber die PDF Programmbibliothek [Poppler](https://de.wikipedia.org/wiki/Poppler) sowie die [Texterkennungssoftware (OCR)](https://de.wikipedia.org/wiki/Texterkennung) [Tesseract](https://de.wikipedia.org/wiki/Tesseract_(Software)) benötigt:
+Für die Verwaltung der Dokumente wird [Paperwork](https://openpaper.work/) verwendet. Das kann über den [Python Paketmanager (pip)](https://de.wikipedia.org/wiki/Pip_(Python)) installiert werden, dazu wird aber die PDF Programmbibliothek [Poppler](https://de.wikipedia.org/wiki/Poppler) sowie die [Texterkennungssoftware (OCR)](https://de.wikipedia.org/wiki/Texterkennung) [Tesseract](https://de.wikipedia.org/wiki/Tesseract_(Software)) benötigt:
 
 	sudo apt install poppler-data libpoppler-dev libpoppler-cpp-dev gir1.2-poppler-0.18 iso-codes tesseract-ocr tesseract-ocr-deu 
 	python3 -m pip install paperwork paperwork-shell python-poppler termcolor natsort levenshtein
@@ -101,7 +101,7 @@ Zuerst sollte ein SSH Schlüssel erstellt und auf den Server authorisiert werden
 	ssh-keygen
 	ssh-copy-id user@example.org
 
-Dann wird das eben erstellte Repo nun auf den Raspberry Pi geklont:
+Dann wird das eben erstellte Repo auf den Raspberry Pi geklont:
 
 	git clone ssh://user@example.org:/home/user/papers.git /home/pi/papers
 	git config --global user.email "scanstation@example.org"
@@ -122,7 +122,7 @@ Vor dem Starten sollten Änderungen (via `git pull`) geholt und nach dem Bearbei
 Konfiguration
 -------------
 
-Die Beispielkonfiguration muss zu `config.ini` kopiert und an die eigenen Bedürfnisse angepasst werden:
+Die Beispielkonfiguration muss nach `config.ini` kopiert und an die eigenen Bedürfnisse angepasst werden:
 
 	cp config.example.ini config.ini
 	nano config.ini
@@ -141,5 +141,5 @@ Die *ScanStation* soll nun auch direkt nach dem Boot automatisch gestartet werde
 
 	sudo systemctl enable scanstation
 
-ausführen
+ausführen.
 
